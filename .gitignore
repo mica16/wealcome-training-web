@@ -1,0 +1,9 @@
+.idea/
+dist/
+node_modules/
+src/**/*.js
+tests/__coverage__/
+tests/**/*.js
+tests/**/*.html
+.DS_Store
+Hyper_v1.5.0/
