@@ -1,5 +1,7 @@
-import {Store} from "redux";
+import {applyMiddleware, combineReducers, compose, createStore, Store} from "redux";
 import {Observable, Subject} from "rxjs";
+import {ActionsObservable, combineEpics, createEpicMiddleware, ofType, StateObservable} from "redux-observable";
+import {map, switchMap} from "rxjs/operators";
 
 interface Apartment {
     address: string;
@@ -8,7 +10,7 @@ interface Apartment {
 interface AppState {
     apartments: {
         data: Apartment[]
-    }
+    };
 }
 
 interface ApartmentsRetrievalGateway {
@@ -29,23 +31,63 @@ class InMemoryApartmentsRetrievalGateway implements ApartmentsRetrievalGateway {
 }
 
 
-describe('Apartement retrieval', () => {
+describe('Apartment retrieval', () => {
 
     let store: Store<AppState>;
+    let apartmentsRetrievalGateway: InMemoryApartmentsRetrievalGateway;
 
-    describe('No apartement available', () => {
+    beforeEach(() => {
+        apartmentsRetrievalGateway = new InMemoryApartmentsRetrievalGateway();
+        store = createReduxStore({apartmentsRetrievalGateway});
+    });
 
-        it('should retrieve no apartement', () => {
-            const apartmentsRetrievalGateway: InMemoryApartmentsRetrievalGateway = new InMemoryApartmentsRetrievalGateway();
-            store.dispatch({type: 'APARTMENT_RETRIEVAL'});
+    describe('No apartment available', () => {
+
+        it('should retrieve no apartment', () => {
+            store.dispatch({type: 'APARTMENTS_RETRIEVAL'});
             apartmentsRetrievalGateway.apartments$.next([]);
             expect(store.getState()).toEqual({
                 apartments: {
                     data: []
-                },
+                }
             });
         });
 
     });
 
+});
+
+const retrieveApartments = (action$: ActionsObservable<any>,
+                            state$: StateObservable<AppState>,
+                            {apartmentsRetrievalGateway}: { apartmentsRetrievalGateway: ApartmentsRetrievalGateway }) =>
+    action$.pipe(
+        ofType('APARTMENTS_RETRIEVAL'),
+        switchMap(() => apartmentsRetrievalGateway.retrieve()
+            .pipe(map(() => ({type: 'APARTMENTS_RETRIEVED', payload: []})))
+        )
+    );
+
+const createReduxStore = (dependencies) => {
+    const epicMiddleware = createEpicMiddleware({dependencies});
+    const rootEpic = combineEpics<any>(retrieveApartments);
+    const store = createStore(
+        combineReducers<AppState>({apartments: apartmentsReducer}),
+        compose(applyMiddleware(epicMiddleware))
+    );
+    epicMiddleware.run(rootEpic);
+    return store;
+};
+
+
+const data = (state: Apartment[] = [], action: any) => {
+    switch (action.type) {
+        case 'APARTMENTS_RETRIEVED':
+            return action.payload;
+        default:
+            return state;
+    }
+};
+
+const apartmentsReducer = combineReducers({
+    data
 });
