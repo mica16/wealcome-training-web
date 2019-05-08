@@ -1,10 +1,10 @@
 import * as React from "react";
 import {Provider} from "react-redux";
-import App from "./app.component";
+import ApartmentsList from "./apartmentsList.component";
 
 export const defineRootComponent = store =>
     (
         <Provider store={store}>
-            <App/>
+            <ApartmentsList/>
         </Provider>
     );

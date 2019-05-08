@@ -11,7 +11,7 @@ type Props = {
 };
 type State = {};
 
-class App extends Component<Props, State> {
+class ApartmentsList extends Component<Props, State> {
 
     componentDidMount() {
         this.props.retrieveApartments();
@@ -30,7 +30,7 @@ class App extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: CoreLogicState) => ({
-    apartments: state.apartments.data,
+    apartments: getAllApartments(state),
     loading: state.apartments.loading
 });
 
@@ -38,4 +38,7 @@ const mapDispatchToProps = {
     retrieveApartments: actionCreators.Actions.retrieveApartments
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(ApartmentsList);
+
+export const getAllApartments = (state: CoreLogicState) =>
+    state.apartments.data.map(a => a.toUpperCase());
