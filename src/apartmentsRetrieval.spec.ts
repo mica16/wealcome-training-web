@@ -1,11 +1,11 @@
 import {Store} from "redux";
 import {InMemoryApartmentsGateway} from "./adapters/secondaries/gateways/inMemoryApartmentsGateway";
 import {configureReduxStore} from "./store/reduxStore";
-import {AppState} from "./store/appState";
+import {CoreLogicState} from "./corelogic/coreLogicState";
 
 describe('Apartments retrieval', () => {
 
-    let store: Store<AppState>;
+    let store: Store<CoreLogicState>;
     let apartmentsGateway: InMemoryApartmentsGateway;
 
     beforeEach(() => {

@@ -1,4 +1,4 @@
-export interface AppState {
+export interface CoreLogicState {
     apartments: {
         data: string[]
     }
