@@ -1,7 +1,7 @@
 import {Store} from "redux";
-import {InMemoryApartmentsGateway} from "./adapters/secondaries/gateways/inMemoryApartmentsGateway";
-import {configureReduxStore} from "./store/reduxStore";
-import {CoreLogicState} from "./corelogic/coreLogicState";
+import {InMemoryApartmentsGateway} from "../../adapters/secondaries/gateways/inMemoryApartmentsGateway";
+import {configureReduxStore} from "../../store/reduxStore";
+import {CoreLogicState} from "../coreLogicState";
 
 describe('Apartments retrieval', () => {
 
