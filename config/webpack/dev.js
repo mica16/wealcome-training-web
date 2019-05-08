@@ -20,5 +20,11 @@ module.exports = merge(commonConfig, {
         historyApiFallback: true
     },
     devtool: 'cheap-module-eval-source-map',
-    plugins: [],
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                'INMEMORY': '"true"'
+            }
+        })
+    ],
 });

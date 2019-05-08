@@ -1,5 +1,6 @@
 export interface CoreLogicState {
     apartments: {
-        data: string[]
+        data: string[];
+        loading: boolean;
     }
 }
