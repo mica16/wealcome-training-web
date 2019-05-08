@@ -1,7 +1,7 @@
 import {combineEpics, createEpicMiddleware} from "redux-observable";
 import {applyMiddleware, combineReducers, createStore} from "redux";
-import {AppState} from "../apartmentsRetrieval.spec";
-import {apartmentsReducer} from "./reducers/apartmentsReducerr";
+import {apartmentsReducer} from "../corelogic/reducers/apartmentsReducerr";
+import {AppState} from "./appState";
 
 const epicMiddleware = createEpicMiddleware();
 
